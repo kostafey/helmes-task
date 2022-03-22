@@ -119,7 +119,7 @@ public class InitDB {
 
     public static String getCategories() {
         Gson gson = new Gson();
-        return gson.toJson(categoriesData);
+        return gson.toJson(CategoryDAO.list());
     }
 
     public static void createDB() {

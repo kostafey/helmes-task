@@ -25,14 +25,21 @@ class NestedList extends React.Component {
             });
     }
 
-    renderRow(index, name, offset) {
+    renderRow(index, name, offset, subCategories) {
         return (
+            <>
             <ListItemButton
                 sx={{ pl: offset }}
                 selected={this.state.selectedIndex === index}
                 onClick={(_) => this.handleListItemClick(index)}>
                 <ListItemText primary={name} />
-            </ListItemButton>
+            </ListItemButton>            
+            {subCategories != null
+             ? subCategories.map((category) => (
+                 this.renderRow(category.id, category.name, offset + 4, category.subCategories)
+               ))
+             : ""}
+            </>
         );
     }
 
@@ -54,11 +61,8 @@ class NestedList extends React.Component {
                 bgcolor: 'background.paper'
             }}>
                 {this.state.categories.map((category) => (
-                    this.renderRow(category.id, category.name, 2)
+                    this.renderRow(category.id, category.name, 2, category.subCategories)
                 ))}
-                <ListItemButton>
-                    <ListItemText primary="Sent mail" />
-                </ListItemButton>
             </List>
         );
     }

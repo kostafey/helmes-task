@@ -15,7 +15,7 @@ class Main extends React.Component {
                                   parent={this}/>}/>                                  
 
                     <Route path="/" render={(props) =>
-                        <NestedList {...props}/>} />
+                        <SectorsForm {...props}/>} />
                 </Switch>
             </HashRouter>
         );
