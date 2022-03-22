@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import com.google.gson.Gson;
 
 public class InitDB {
     private static final String CREATE_SECTORS_SQL =
@@ -115,6 +116,11 @@ public class InitDB {
             new Category(112, 21, "Road"),
             new Category(113, 21, "Water")
         ));
+
+    public static String getCategories() {
+        Gson gson = new Gson();
+        return gson.toJson(categoriesData);
+    }
 
     public static void createDB() {
         Connection dbConnection = null;

@@ -1,5 +1,7 @@
 package controllers;
 
+import com.helmes.InitDB;
+
 import play.mvc.*;
 
 /**
@@ -16,6 +18,10 @@ public class HomeController extends Controller {
      */
     public Result index() {
         return ok(views.html.index.render());
+    }
+
+    public Result getCategories() {
+        return ok(InitDB.getCategories()).as("application/json");
     }
 
 }
