@@ -55,7 +55,7 @@ class NestedList extends React.Component {
         return (
             <List sx={{
                 width: '100%',
-                maxHeight: 600,
+                maxHeight: 570,
                 position: 'relative',
                 overflow: 'auto',
                 bgcolor: 'background.paper'

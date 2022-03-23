@@ -175,37 +175,4 @@ public class InitDB {
             }
         }
     }
-
-    public static ArrayList<String> readAllData() {
-        Connection dbConnection = null;
-        Statement statement = null;
-
-        String readDataSQL = "SELECT * FROM Log";
-        ArrayList<String> data = new ArrayList<>();
-
-        try {
-            dbConnection = ConnManager.getConnection();
-            statement = dbConnection.createStatement();
-            ResultSet resultSet = statement.executeQuery(readDataSQL);
-            while (resultSet.next()) {
-                data.add(String.format("id: %4d -- data: %s",
-                                resultSet.getLong("id"),
-                                resultSet.getString("data")));
-            }
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
-            }  catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return data;
-    }
 }
