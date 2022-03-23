@@ -11,7 +11,6 @@ class NestedList extends React.Component {
     }
 
     state = {
-        selectedIndex: null,
         categories: []
     };
 
@@ -30,7 +29,7 @@ class NestedList extends React.Component {
             <>
             <ListItemButton
                 sx={{ pl: offset }}
-                selected={this.state.selectedIndex === index}
+                selected={this.props.parent.state.categoryIndex === index}
                 onClick={(_) => this.handleListItemClick(index)}>
                 <ListItemText primary={name} />
             </ListItemButton>            
@@ -44,7 +43,7 @@ class NestedList extends React.Component {
     }
 
     handleListItemClick = (index) => {
-        this.setState({ selectedIndex: index });
+        this.props.parent.setState({ categoryIndex: index });
     };
 
     componentDidMount() {
@@ -55,7 +54,7 @@ class NestedList extends React.Component {
         return (
             <List sx={{
                 width: '100%',
-                maxHeight: 570,
+                maxHeight: 560,
                 position: 'relative',
                 overflow: 'auto',
                 bgcolor: 'background.paper'
