@@ -29,7 +29,7 @@ class NestedList extends React.Component {
             <>
             <ListItemButton
                 sx={{ pl: offset }}
-                selected={this.props.parent.state.categoryIndex === index}
+                selected={this.props.parent.state.categoryId === index}
                 onClick={(_) => this.handleListItemClick(index)}>
                 <ListItemText primary={name} />
             </ListItemButton>            
@@ -43,7 +43,7 @@ class NestedList extends React.Component {
     }
 
     handleListItemClick = (index) => {
-        this.props.parent.setState({ categoryIndex: index });
+        this.props.parent.setState({ categoryId: index });
     };
 
     componentDidMount() {

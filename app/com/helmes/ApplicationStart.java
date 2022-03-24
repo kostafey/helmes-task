@@ -14,6 +14,7 @@ public class ApplicationStart {
   public ApplicationStart(ApplicationLifecycle lifecycle, Environment environment) {
       InitDB.createDB();
       InitDB.writeData();
+      HibernateUtil.init();
     // Shut-down hook
     lifecycle.addStopHook(
         () -> {

@@ -6,16 +6,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import com.google.gson.Gson;
 
 public class InitDB {
-    private static final String CREATE_SECTORS_SQL =
+    private static final String CREATE_CATEGORY_SQL =
             "CREATE TABLE IF NOT EXISTS Category (            \n" +
             "  id BIGINT not null auto_increment primary key, \n" +
             "  parent_id BIGINT,                              \n" +
             "  name varchar(128)                              \n" +
             ")                                                \n";
-    
+
+    private static final String CREATE_USER_SQL =
+            "CREATE TABLE IF NOT EXISTS User (                \n" +
+            "  id BIGINT not null auto_increment primary key, \n" +
+            "  name varchar(128),                             \n" +
+            "  category_id BIGINT,                            \n" +            
+            "  agreeToTerms BOOLEAN                           \n" +
+            ")                                                \n";
+
     private static final ArrayList<Category> categoriesData = new ArrayList<Category>(
         Arrays.asList(
             new Category(1, null, "Manufacturing"),
@@ -117,18 +124,14 @@ public class InitDB {
             new Category(113, 21, "Water")
         ));
 
-    public static String getCategories() {
-        Gson gson = new Gson();
-        return gson.toJson(CategoryDAO.list());
-    }
-
     public static void createDB() {
         Connection dbConnection = null;
         Statement statement = null;
         try {
             dbConnection = ConnManager.getConnection();
             statement = dbConnection.createStatement();
-            statement.execute(CREATE_SECTORS_SQL);
+            statement.execute(CREATE_CATEGORY_SQL);
+            statement.execute(CREATE_USER_SQL);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

@@ -16,14 +16,15 @@ class SectorsForm extends React.Component {
     constructor(props) {
         super(props);
         this.handleSave = this.handleSave.bind(this);
+        this.handleLoad = this.handleLoad.bind(this);
         this.state = {
             name: '',
-            categoryIndex: null,
-            isAgreeToTerms: false,
+            categoryId: null,
+            agreeToTerms: false,
             nameError: false,
             nameErrorText: "",
-            isAgreeToTermsError: false,
-            isAgreeToTermsErrorText: "",
+            agreeToTermsError: false,
+            agreeToTermsErrorText: "",
         }
     }
 
@@ -39,56 +40,86 @@ class SectorsForm extends React.Component {
         });
     };
 
+    handleLoad() {
+        const config = { headers: { 'Content-Type': 'application/json',
+                                    'X-Requested-With': 'HttpRequest',
+                                    'Csrf-Token': 'nocheck'},
+                         timeout: 0};
+         axios.get("/user/get", null, config)
+         .then( (response) => {
+             if (response.status === 200) {
+                this.setState({ 
+                    name: response.data.name,
+                    categoryId: response.data.category.id,
+                    agreeToTerms: response.data.agreeToTerms });
+                
+             }
+         })
+         .catch( (error) => {
+            console.log(error);
+         });            
+    }
+
     handleSave() {
+        let nameError = false;
+        let nameErrorText = '';
+        let categoryIdError = false;
+        let categoryIdErrorText = '';
+        let agreeToTermsError = false;
+        let agreeToTermsErrorText = '';
         if (this.state.name === '') {
-            this.setState({ 
-                nameError: true,
-                nameErrorText: "Can't be empty."});
+            nameError = true;
+            nameErrorText = "Can't be empty.";
         } else {
-            this.setState({ 
-                nameError: false,
-                nameErrorText: ""})
+            nameError = false;
+            nameErrorText = "";
         }
-        if (this.state.categoryIndex == null) {
-            this.setState({ 
-                categoryIndexError: true,
-                categoryIndexErrorText: "Should be selected."});
+        if (this.state.categoryId == null) {
+            categoryIdError = true;
+            categoryIdErrorText = "Should be selected.";
         } else {
-            this.setState({ 
-                categoryIndexError: false,
-                categoryIndexErrorText: ""})
+            categoryIdError = false;
+            categoryIdErrorText = "";
         }        
-        if (!this.state.isAgreeToTerms) {
-            this.setState({ 
-                isAgreeToTermsError: true,
-                isAgreeToTermsErrorText: "Should be checked"});
+        if (!this.state.agreeToTerms) {
+            agreeToTermsError = true;
+            agreeToTermsErrorText = "Should be checked";
         } else {
             this.setState({ 
-                isAgreeToTermsError: false,
-                isAgreeToTermsErrorText: ""})
+                agreeToTermsError: false,
+                agreeToTermsErrorText: ""})
         }
-        if (![this.state.categoryIndexError,
-              this.state.isAgreeToTermsError,
-              this.state.isAgreeToTermsError].includes(true)) {
-            const config = { headers: { 'Content-Type': 'application/json',
-                                        'X-Requested-With': 'HttpRequest',
-                                        'Csrf-Token': 'nocheck'},
-                             timeout: 0};
-            const data = new FormData();
-            ['name',
-             'categoryIndex',
-             'isAgreeToTerms'].forEach(f => {
-                data.append(f, this.state[f]);
-             });
-             axios.post("/user/save", data, config)
-             .then( (response) => {
-                 if (response.status === 200) {
-                 }
-             })
-             .catch( (error) => {
-                console.log(error);
-             });            
-        }
+        this.setState({ 
+            nameError: nameError,
+            nameErrorText: nameErrorText,
+            categoryIdError: categoryIdError,
+            categoryIdErrorText: categoryIdErrorText,
+            agreeToTermsError: agreeToTermsError,
+            agreeToTermsErrorText: agreeToTermsErrorText},
+            () => {
+                if (![this.state.categoryIdError,
+                    this.state.agreeToTermsError,
+                    this.state.agreeToTermsError].includes(true)) {
+                  const config = { headers: { 'Content-Type': 'application/json',
+                                              'X-Requested-With': 'HttpRequest',
+                                              'Csrf-Token': 'nocheck'},
+                                   timeout: 0};
+                  const data = new FormData();
+                  ['name',
+                   'categoryId',
+                   'agreeToTerms'].forEach(f => {
+                      data.append(f, this.state[f]);
+                   });
+                   axios.post("/user/save", data, config)
+                   .then( (response) => {
+                       if (response.status === 200) {
+                       }
+                   })
+                   .catch( (error) => {
+                      console.log(error);
+                   });            
+              }
+            });        
     }
 
     render() {
@@ -116,25 +147,25 @@ class SectorsForm extends React.Component {
                                 variant="outlined" />
 
                             <FormControl sx={{ width: '100%' }}
-                                error={this.state.categoryIndexError}>
+                                error={this.state.categoryIdError}>
                                 <Paper sx={{ mt: 1, width: '100%' }} variant="outlined">
                                     <NestedList parent={this} />
                                 </Paper>
-                                <FormHelperText>{this.state.categoryIndexErrorText}</FormHelperText>
+                                <FormHelperText>{this.state.categoryIdErrorText}</FormHelperText>
                             </FormControl>
 
                             <FormGroup sx={{ mt: 1 }}>
                                 <FormControl
-                                    error={this.state.isAgreeToTermsError}>
-                                <FormControlLabel                                     
+                                    error={this.state.agreeToTermsError}>
+                                <FormControlLabel
                                     control={
                                         <Checkbox
                                             required={true}
-                                            onChange={this.handleChangeBoolean("isAgreeToTerms")}
-                                            checked={this.state.isAgreeToTerms} />
+                                            onChange={this.handleChangeBoolean("agreeToTerms")}
+                                            checked={this.state.agreeToTerms} />
                                     }
                                     label="Agree to terms"/>
-                                        <FormHelperText>{this.state.isAgreeToTermsErrorText}</FormHelperText>
+                                        <FormHelperText>{this.state.agreeToTermsErrorText}</FormHelperText>
                                     </FormControl>
                             </FormGroup>
                             
@@ -143,7 +174,13 @@ class SectorsForm extends React.Component {
                                        alignItems: "flex-end",
                                        width: '100%' }}>
                                 <Button
+                                    color="secondary"
                                     sx={{ width: '150px' }} 
+                                    variant="contained"
+                                    onClick={this.handleLoad}>Load</Button>                                           
+                                <Button
+                                    color="primary"
+                                    sx={{ width: '150px', ml: 1 }} 
                                     variant="contained"
                                     onClick={this.handleSave}>Save</Button>
                             </Box>                            

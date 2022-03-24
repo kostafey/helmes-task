@@ -30,6 +30,7 @@
         <!-- <property name="hbm2ddl.auto">create</property> -->
 
          <mapping class="com.helmes.Category"/>
+         <mapping class="com.helmes.User"/>
     </session-factory>  
   
 </hibernate-configuration>  
