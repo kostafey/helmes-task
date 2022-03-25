@@ -13,7 +13,7 @@ public class ConnManager {
         Connection conn = null;
         try {
             Class.forName("org.h2.Driver");
-            conn = DriverManager.getConnection("jdbc:h2:~/helmes/helmes-db", "sa", "");
+            conn = DriverManager.getConnection("jdbc:h2:./db/helmes-db", "sa", "");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -31,7 +31,7 @@ public class ConnManager {
         try {
             Class.forName("org.h2.Driver");
             conn = DriverManager.getConnection(
-                    "jdbc:h2:tcp://192.168.36.74:9092/~/helmes/helmes-db;ifexists=true;",
+                    "jdbc:h2:tcp://192.168.36.74:9092/./db/helmes-db;ifexists=true;",
                     "sa",
                     "");
         } catch (SQLException | ClassNotFoundException e) {
