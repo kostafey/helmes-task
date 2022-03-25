@@ -161,7 +161,6 @@ public class InitDB {
                             "" + c.getParentId() + "," +
                             "'" + c.getName() + "')";
                 statement.executeUpdate(insertDataSQL);
-                System.out.println(c + " inserted.");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

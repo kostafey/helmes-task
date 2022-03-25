@@ -24,6 +24,10 @@ public class HomeController extends Controller {
         return ok(CategoryDAO.getCategoriesAsJson()).as("application/json");
     }
 
+    public Result getCategoriesFlat() {
+        return ok(CategoryDAO.getCategoriesFlatAsJson()).as("application/json");
+    }    
+
     private Result addNewUser(
             UserForm userForm,
             Http.Request request) {

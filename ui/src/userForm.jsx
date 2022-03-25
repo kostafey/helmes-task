@@ -12,7 +12,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 
-class SectorsForm extends React.Component {
+class UserForm extends React.Component {
     constructor(props) {
         super(props);
         this.handleSave = this.handleSave.bind(this);
@@ -26,6 +26,10 @@ class SectorsForm extends React.Component {
             agreeToTermsError: false,
             agreeToTermsErrorText: "",
         }
+    }
+
+    gotoCategoryForm() {
+        window.location.hash = "categoryForm";
     }
 
     handleChange = name => event => {
@@ -98,7 +102,7 @@ class SectorsForm extends React.Component {
             agreeToTermsErrorText: agreeToTermsErrorText},
             () => {
                 if (![this.state.categoryIdError,
-                    this.state.agreeToTermsError,
+                    this.state.categoryIdError,
                     this.state.agreeToTermsError].includes(true)) {
                   const config = { headers: { 'Content-Type': 'application/json',
                                               'X-Requested-With': 'HttpRequest',
@@ -113,6 +117,8 @@ class SectorsForm extends React.Component {
                    axios.post("/user/save", data, config)
                    .then( (response) => {
                        if (response.status === 200) {
+                        // Refill the form using stored data
+                        this.handleLoad();
                        }
                    })
                    .catch( (error) => {
@@ -174,10 +180,15 @@ class SectorsForm extends React.Component {
                                        alignItems: "flex-end",
                                        width: '100%' }}>
                                 <Button
-                                    color="secondary"
-                                    sx={{ width: '150px' }} 
+                                    color="primary"
+                                    sx={{ width: '200px' }} 
                                     variant="contained"
-                                    onClick={this.handleLoad}>Load</Button>                                           
+                                    onClick={this.gotoCategoryForm}>Edit Categories</Button>                                           
+                                <Button
+                                    color="success"
+                                    sx={{ width: '150px', ml: 1 }} 
+                                    variant="contained"
+                                    onClick={this.handleLoad}>Load</Button>
                                 <Button
                                     color="primary"
                                     sx={{ width: '150px', ml: 1 }} 
@@ -193,4 +204,4 @@ class SectorsForm extends React.Component {
     }
 }
 
-export default SectorsForm;
+export default UserForm;

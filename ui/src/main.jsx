@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, HashRouter } from 'react-router-dom';
-import SectorsForm from './sectorsForm';
-import NestedList from './nestedList';
+import UserForm from './userForm';
+import CategoryForm from './categoryForm';
 
 class Main extends React.Component {
 
@@ -9,13 +9,17 @@ class Main extends React.Component {
         return (
             <HashRouter>
                 <Switch>
-                    <Route path="/sectorsForm" render={(props) =>
-                        <SectorsForm {...props}
+                    <Route path="/userForm" render={(props) =>
+                        <UserForm {...props}
+                                  context={this.context}
+                                  parent={this}/>}/>
+                    <Route path="/categoryForm" render={(props) =>
+                        <CategoryForm {...props}
                                   context={this.context}
                                   parent={this}/>}/>                                  
 
                     <Route path="/" render={(props) =>
-                        <SectorsForm {...props}/>} />
+                        <UserForm {...props}/>} />
                 </Switch>
             </HashRouter>
         );

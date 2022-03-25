@@ -44,6 +44,7 @@ class NestedList extends React.Component {
 
     handleListItemClick = (index) => {
         this.props.parent.setState({ categoryId: index });
+        this.props.onChange(index);
     };
 
     componentDidMount() {

@@ -24,12 +24,8 @@ public class CategoryDAO {
     public static List<Category> list() {
         List<Category> categories = null;
         try {
-            Transaction tx = HibernateUtil.getSession().beginTransaction();
-
             categories = HibernateUtil.getSession().createQuery(
                     "FROM Category WHERE parentId is null").list();
-
-            tx.commit();
         } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
@@ -41,5 +37,23 @@ public class CategoryDAO {
     public static String getCategoriesAsJson() {
         Gson gson = new Gson();
         return gson.toJson(CategoryDAO.list());
+    }
+
+    public static List<Category> flatList() {
+        List<Category> categories = null;
+        try {
+            categories = HibernateUtil.getSession().createQuery(
+                    "FROM Category").list();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.closeSession();
+        }
+        return categories;
+    }
+
+    public static String getCategoriesFlatAsJson() {
+        Gson gson = new Gson();
+        return gson.toJson(CategoryDAO.flatList());
     }
 }

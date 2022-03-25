@@ -5,6 +5,7 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
 GET     /category/list              controllers.HomeController.getCategories()
+GET     /category/flatList          controllers.HomeController.getCategoriesFlat()
 POST    /user/save                  controllers.HomeController.saveUserData(request: Request)
 GET     /user/get                  controllers.HomeController.getUserData(request: Request)
 
