@@ -13,7 +13,11 @@ public class CategoryDAO {
         Session session = HibernateUtil.getSession();
         try {
             Transaction tx = session.beginTransaction();
-            session.saveOrUpdate(category);
+            if (category.getId() == null) {
+                session.save(category);
+            } else {
+                session.update(category);
+            }
             tx.commit();
         } catch (HibernateException e) {
             e.printStackTrace();

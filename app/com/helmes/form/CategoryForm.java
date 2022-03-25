@@ -6,7 +6,7 @@ public class CategoryForm {
     private Integer parentId;
 
     public Integer getCategoryId() {
-        return categoryId;
+        return categoryId > 0 ? categoryId : null;
     }
 
     public void setCategoryId(Integer categoryId) {

@@ -16,11 +16,12 @@ class CategoryForm extends React.Component {
     constructor(props) {
         super(props);
         this.handleSave = this.handleSave.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
         this.loadCategoriesFlat = this.loadCategoriesFlat.bind(this);
         this.state = {
             categories: [],
             name: '',
-            categoryId: null,
+            categoryId: -1,
             parentId: -1,
             refreshCategories: false,
             nameError: false,
@@ -58,7 +59,49 @@ class CategoryForm extends React.Component {
         });
     };
 
-    handleSave() {
+    handleDelete() {
+        let nameError = false;
+        let nameErrorText = '';
+        if (this.state.name === '') {
+            nameError = true;
+            nameErrorText = "Select category for delete";
+        } else {
+            nameError = false;
+            nameErrorText = "";
+        }
+        this.setState({
+            nameError: nameError,
+            nameErrorText: nameErrorText
+        },
+            () => {
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'HttpRequest',
+                        'Csrf-Token': 'nocheck'
+                    },
+                    timeout: 0
+                };
+                const data = new FormData();
+                ['name',
+                 'categoryId',
+                 'parentId'].forEach(f => {
+                     data.append(f, this.state[f]);
+                 });
+             axios.post("/category/delete", data, config)
+                 .then((response) => {
+                     if (response.status === 200) {
+                         this.setState({ refreshCategories: true });
+                         this.loadCategoriesFlat();                                
+                     }
+                 })
+                 .catch((error) => {
+                     console.log(error);
+                 });
+            });
+    }
+
+    handleSave = (isAdd) => () => {
         let nameError = false;
         let nameErrorText = '';
         if (this.state.name === '') {
@@ -70,7 +113,8 @@ class CategoryForm extends React.Component {
         }
         this.setState({
             nameError: nameError,
-            nameErrorText: nameErrorText
+            nameErrorText: nameErrorText,
+            categoryId: isAdd ? -1 : this.state.categoryId,
         },
             () => {
                 if (!this.state.nameError) {
@@ -174,17 +218,17 @@ class CategoryForm extends React.Component {
                                     color="secondary"
                                     sx={{ width: '150px', ml: 1 }}
                                     variant="contained"
-                                    onClick={this.handleLoad}>Delete</Button>
+                                    onClick={this.handleDelete}>Delete</Button>
                                 <Button
                                     color="success"
                                     sx={{ width: '150px', ml: 1 }}
                                     variant="contained"
-                                    onClick={this.handleLoad}>Add</Button>
+                                    onClick={this.handleSave(true)}>Add</Button>
                                 <Button
                                     color="primary"
                                     sx={{ width: '150px', ml: 1 }}
                                     variant="contained"
-                                    onClick={this.handleSave}>Save</Button>
+                                    onClick={this.handleSave(false)}>Save</Button>
                             </Box>
                         </Box>
 
