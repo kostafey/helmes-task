@@ -16,12 +16,13 @@ class CategoryForm extends React.Component {
     constructor(props) {
         super(props);
         this.handleSave = this.handleSave.bind(this);
-        this.loadCategories = this.loadCategories.bind(this);
+        this.loadCategoriesFlat = this.loadCategoriesFlat.bind(this);
         this.state = {
             categories: [],
             name: '',
             categoryId: null,
-            parentId: null,
+            parentId: -1,
+            refreshCategories: false,
             nameError: false,
             nameErrorText: "",
         }
@@ -31,7 +32,7 @@ class CategoryForm extends React.Component {
         window.location.hash = "userForm";
     }
 
-    loadCategories() {
+    loadCategoriesFlat() {
         axios.get('/category/flatList')
             .then((response) => {
                 this.setState({ categories: response.data });
@@ -42,7 +43,7 @@ class CategoryForm extends React.Component {
     }
 
     componentDidMount() {
-        this.loadCategories();
+        this.loadCategoriesFlat();
     }
 
     handleChange = name => event => {
@@ -90,7 +91,8 @@ class CategoryForm extends React.Component {
                     axios.post("/category/save", data, config)
                         .then((response) => {
                             if (response.status === 200) {
-                                this.forceUpdate();
+                                this.setState({ refreshCategories: true });
+                                this.loadCategoriesFlat();                                
                             }
                         })
                         .catch((error) => {
@@ -116,14 +118,17 @@ class CategoryForm extends React.Component {
                         <Box sx={{ fontSize: 18, m: 2, mt: 1, textAlign: 'left' }}>
                             <FormControl sx={{ width: '100%' }}>
                                 <Paper sx={{ mt: 1, width: '100%' }} variant="outlined">
-                                    <NestedList parent={this} 
+                                    <NestedList parent={this}
+                                    refresh = {this.state.refreshCategories}
                                     onChange={(index) => {
                                         let category = this.state.categories.find((c) =>
                                             c.id === index);
                                         this.setState({ 
                                             categoryId: index,
                                             name: category.name,
-                                            parentId: category.parentId });
+                                            parentId: (category.parentId === undefined)
+                                                ? -1
+                                                : category.parentId});
                                     }}/>
                                 </Paper>
                             </FormControl>

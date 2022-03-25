@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Category")
-class Category {
+public class Category {
     @Id @GeneratedValue
     @Column(name = "id")
     private Integer id;

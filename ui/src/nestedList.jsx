@@ -47,6 +47,13 @@ class NestedList extends React.Component {
         this.props.onChange(index);
     };
 
+    componentWillReceiveProps(props) {
+        if (props.refresh) {
+            this.loadCategories();
+            props.refresh = !props.refresh;
+        }
+      }
+
     componentDidMount() {
         this.loadCategories();
     }

@@ -1,8 +1,9 @@
 package controllers;
 
+import com.helmes.form.UserForm;
+import com.helmes.form.CategoryForm;
 import com.helmes.CategoryDAO;
-
-import com.helmes.UserForm;
+import com.helmes.Category;
 import com.helmes.User;
 import com.helmes.UserDAO;
 
@@ -26,6 +27,28 @@ public class HomeController extends Controller {
 
     public Result getCategoriesFlat() {
         return ok(CategoryDAO.getCategoriesFlatAsJson()).as("application/json");
+    }
+
+    public Result saveCategory(Http.Request request) {
+        CategoryForm categoryForm = formFactory.form(CategoryForm.class)
+                .bindFromRequest(request).get();
+        Category category = new Category(
+            categoryForm.getCategoryId(),
+            categoryForm.getParentId(),
+            categoryForm.getName());
+        CategoryDAO.saveOrUpdate(category);
+        return ok();
+    }
+
+    public Result deleteCategory(Http.Request request) {
+        CategoryForm categoryForm = formFactory.form(CategoryForm.class)
+                .bindFromRequest(request).get();
+        Category category = new Category(
+            categoryForm.getCategoryId(),
+            categoryForm.getParentId(),
+            categoryForm.getName());
+        CategoryDAO.delete(category);
+        return ok();
     }    
 
     private Result addNewUser(

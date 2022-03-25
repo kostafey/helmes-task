@@ -1,4 +1,4 @@
-package com.helmes;
+package com.helmes.form;
 
 public class UserForm {
     private String name;

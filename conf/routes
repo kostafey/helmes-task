@@ -6,6 +6,8 @@
 GET     /                           controllers.HomeController.index()
 GET     /category/list              controllers.HomeController.getCategories()
 GET     /category/flatList          controllers.HomeController.getCategoriesFlat()
+POST    /category/save              controllers.HomeController.saveCategory(request: Request)
+POST    /category/delete              controllers.HomeController.deleteCategory(request: Request)
 POST    /user/save                  controllers.HomeController.saveUserData(request: Request)
 GET     /user/get                  controllers.HomeController.getUserData(request: Request)
 

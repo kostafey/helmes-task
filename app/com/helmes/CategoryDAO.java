@@ -4,9 +4,36 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
+import org.hibernate.Session;
 import com.google.gson.Gson;
 
 public class CategoryDAO {
+
+    public static void saveOrUpdate(Category category) {
+        Session session = HibernateUtil.getSession();
+        try {
+            Transaction tx = session.beginTransaction();
+            session.saveOrUpdate(category);
+            tx.commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.closeSession();
+        }
+    }
+
+    public static void delete(Category category) {
+        Session session = HibernateUtil.getSession();
+        try {
+            Transaction tx = session.beginTransaction();
+            session.delete(category);
+            tx.commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.closeSession();
+        }
+    }    
 
     public static Category get(Integer id) {
         Category category = null;
