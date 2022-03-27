@@ -2,12 +2,11 @@ package controllers;
 
 import com.helmes.form.UserForm;
 import com.helmes.form.CategoryForm;
-import com.helmes.CategoryDAO;
-import com.helmes.Category;
-import com.helmes.User;
-import com.helmes.UserDAO;
+import com.helmes.db.CategoryDAO;
+import com.helmes.db.Category;
+import com.helmes.db.User;
+import com.helmes.db.UserDAO;
 
-import play.data.Form;
 import play.mvc.*;
 
 import javax.inject.Inject;

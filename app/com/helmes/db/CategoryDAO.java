@@ -1,7 +1,8 @@
-package com.helmes;
+package com.helmes.db;
 
 import java.util.List;
 
+import com.helmes.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.hibernate.Session;

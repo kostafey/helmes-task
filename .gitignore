@@ -14,4 +14,4 @@ project/project/
 /public
 ui/node_modules
 app/views/index.scala.html
-db
+/db

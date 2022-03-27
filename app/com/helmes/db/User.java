@@ -1,12 +1,13 @@
-package com.helmes;
+package com.helmes.db;
 
 import javax.persistence.*;
 import com.google.gson.Gson;
+import com.helmes.db.Category;
 
 @Entity
 @Table(name = "User")
 public class User {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 

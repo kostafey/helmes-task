@@ -1,4 +1,4 @@
-package com.helmes;
+package com.helmes.db;
 
 import javax.persistence.*;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 @Entity
 @Table(name = "Category")
 public class Category {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 

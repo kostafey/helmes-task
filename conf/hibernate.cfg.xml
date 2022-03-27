@@ -11,14 +11,20 @@
         <property name="connection.url">jdbc:h2:./db/helmes-db</property>
         <property name="connection.username">sa</property>
         <property name="connection.password"/>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
         
         <property name="hibernate.default_schema">PUBLIC</property>
 
         <!-- JDBC connection pool (use the built-in) -->
-        <property name="connection.pool_size">10</property>
+        <!-- <property name="connection.pool_size">10</property> -->
 
-        <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+        <!-- JDBC c3p0 connection pool -->
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.acquire_increment">5</property>
+        <property name="hibernate.c3p0.timeout">1800</property>
 
         <!-- Disable the second-level cache  -->
         <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
@@ -29,8 +35,8 @@
         <!-- Drop and re-create the database schema on startup -->
         <!-- <property name="hbm2ddl.auto">create</property> -->
 
-         <mapping class="com.helmes.Category"/>
-         <mapping class="com.helmes.User"/>
+         <mapping class="com.helmes.db.Category"/>
+         <mapping class="com.helmes.db.User"/>
     </session-factory>  
   
 </hibernate-configuration>  

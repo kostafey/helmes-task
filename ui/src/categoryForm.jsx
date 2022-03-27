@@ -36,7 +36,13 @@ class CategoryForm extends React.Component {
     loadCategoriesFlat() {
         axios.get('/category/flatList')
             .then((response) => {
-                this.setState({ categories: response.data });
+                let categories = response.data;
+                categories.unshift({
+                    id: -1,
+                    name: "-no-parent-",
+                    subCategories: []
+                });
+                this.setState({ categories: categories });
             })
             .catch((error) => {
                 console.log(error);

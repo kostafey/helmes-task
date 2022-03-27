@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import axios from 'axios';
 
 class UserForm extends React.Component {
@@ -21,6 +22,7 @@ class UserForm extends React.Component {
             name: '',
             categoryId: null,
             agreeToTerms: false,
+            inProgress: false,
             nameError: false,
             nameErrorText: "",
             agreeToTermsError: false,
@@ -49,10 +51,12 @@ class UserForm extends React.Component {
                                     'X-Requested-With': 'HttpRequest',
                                     'Csrf-Token': 'nocheck'},
                          timeout: 0};
+         this.setState({ inProgress: true });
          axios.get("/user/get", null, config)
          .then( (response) => {
              if (response.status === 200) {
-                this.setState({ 
+                this.setState({
+                    inProgress: false,
                     name: response.data.name,
                     categoryId: response.data.category.id,
                     agreeToTerms: response.data.agreeToTerms });
@@ -60,6 +64,7 @@ class UserForm extends React.Component {
              }
          })
          .catch( (error) => {
+            this.setState({ inProgress: false });
             console.log(error);
          });            
     }
@@ -131,7 +136,11 @@ class UserForm extends React.Component {
     render() {
         return (
             <Center>
-                <Box
+                {this.state.inProgress
+                ? <Box sx={{ display: 'flex', mt: 20 }}>
+                    <CircularProgress size={90} />
+                  </Box>
+                : <Box
                     sx={{
                         display: 'flex',
                         flexWrap: 'wrap',
@@ -198,7 +207,8 @@ class UserForm extends React.Component {
                         </Box>
                         
                     </Paper>
-                </Box>
+                  </Box>
+                }
             </Center>
         );
     }
