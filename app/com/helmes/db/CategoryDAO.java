@@ -6,6 +6,7 @@ import com.helmes.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import com.google.gson.Gson;
 
 public class CategoryDAO {
@@ -27,17 +28,28 @@ public class CategoryDAO {
         }
     }
 
-    public static void delete(Category category) {
+    public static boolean delete(Category category) {
         Session session = HibernateUtil.getSession();
+        List<Category> categories = null;
+        boolean result = false;
         try {
             Transaction tx = session.beginTransaction();
-            session.delete(category);
+            Query q = HibernateUtil.getSession().createQuery(
+                "FROM User u " +
+                "LEFT JOIN Category c on c.id = u.category " +
+                "WHERE c.id = :category_id");
+            categories =  q.setParameter("category_id", category.getId()).getResultList();
+            if (categories == null || categories.size() == 0) {
+                session.delete(category);
+                result = true;
+            }
             tx.commit();
         } catch (HibernateException e) {
             e.printStackTrace();
         } finally {
             HibernateUtil.closeSession();
         }
+        return result;
     }    
 
     public static Category get(Integer id) {

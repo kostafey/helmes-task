@@ -46,8 +46,11 @@ public class HomeController extends Controller {
             categoryForm.getCategoryId(),
             categoryForm.getParentId(),
             categoryForm.getName());
-        CategoryDAO.delete(category);
-        return ok();
+        if (CategoryDAO.delete(category)) {
+            return ok();
+        } else {
+            return forbidden();
+        }
     }    
 
     private Result addNewUser(

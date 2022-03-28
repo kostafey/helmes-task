@@ -10,7 +10,13 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import axios from 'axios';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
 class CategoryForm extends React.Component {
     constructor(props) {
@@ -24,6 +30,7 @@ class CategoryForm extends React.Component {
             categoryId: -1,
             parentId: -1,
             refreshCategories: false,
+            showDeleteForbiddenMessage: false,
             nameError: false,
             nameErrorText: "",
         }
@@ -65,6 +72,13 @@ class CategoryForm extends React.Component {
         });
     };
 
+    handleCloseMsg = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        this.setState({ showDeleteForbiddenMessage: false });
+      };
+
     handleDelete() {
         let nameError = false;
         let nameErrorText = '';
@@ -102,7 +116,11 @@ class CategoryForm extends React.Component {
                      }
                  })
                  .catch((error) => {
-                     console.log(error);
+                    if (error.response.status === 403) {
+                        this.setState({ showDeleteForbiddenMessage: true });
+                    } else {
+                        console.log(error);
+                    }
                  });
             });
     }
@@ -155,6 +173,17 @@ class CategoryForm extends React.Component {
     render() {
         return (
             <Center>
+                <Snackbar 
+                        open={this.state.showDeleteForbiddenMessage} 
+                        autoHideDuration={6000}
+                        onClose={this.handleCloseMsg}>
+                    <Alert 
+                        onClose={this.handleCloseMsg} 
+                        severity="error"
+                        sx={{ width: '100%' }}>
+                        Can't delete this category.
+                    </Alert>
+                </Snackbar>
                 <Box
                     sx={{
                         display: 'flex',
